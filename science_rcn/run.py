@@ -93,7 +93,7 @@ def run_experiment(data_dir='data/MNIST',
     for test_idx, (winner_idx, _) in enumerate(test_results):
         correct += int(test_data[test_idx][1]) == winner_idx / (train_size / 10)
     print "correct: "+ repr(correct) + "; total:"+ repr(len(test_results));
-    print "Total test accuracy = {}".format(float(correct) / len(test_results))
+    print "Total test accuracy = "+repr((float(correct) / len(test_results))*100)+"%"
 
     return all_model_factors, test_results
 
