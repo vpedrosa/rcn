@@ -2,15 +2,15 @@
 Reference implementation of a two-level RCN model for MNIST classification experiments.
 
 Examples:
-- To run a small unit test that trains and tests on 20 images using one CPU 
+- To run a small unit test that trains and tests on 20 images using one CPU
   (takes ~2 minutes, accuracy is ~60%):
 python science_rcn/run.py
 
-- To run a slightly more interesting experiment that trains on 100 images and tests on 20 
+- To run a slightly more interesting experiment that trains on 100 images and tests on 20
   images using multiple CPUs (takes <1 min using 7 CPUs, accuracy is ~90%):
 python science_rcn/run.py --train_size 100 --test_size 20 --parallel
 
-- To test on the full 10k MNIST test set, training on 1000 examples 
+- To test on the full 10k MNIST test set, training on 1000 examples
 (could take hours depending on the number of available CPUs, average accuracy is ~97.7+%):
 python science_rcn/run.py --full_test_set --train_size 1000 --parallel --pool_shape 25 --perturb_factor 2.0
 """
@@ -39,7 +39,7 @@ def run_experiment(data_dir='data/MNIST',
                    parallel=True,
                    verbose=False,
                    seed=5):
-    """Run MNIST experiments and evaluate results. 
+    """Run MNIST experiments and evaluate results.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ def run_experiment(data_dir='data/MNIST',
         Higher verbosity level.
     seed : int
         Random seed used by numpy.random for sampling training set.
-    
+
     Returns
     -------
     model_factors : ([numpy.ndarray], [numpy.ndarray], [networkx.Graph])
@@ -91,7 +91,8 @@ def run_experiment(data_dir='data/MNIST',
     # Evaluate result
     correct = 0
     for test_idx, (winner_idx, _) in enumerate(test_results):
-        correct += int(test_data[test_idx][1]) == winner_idx // (train_size // 10)
+        correct += int(test_data[test_idx][1]) == winner_idx / (train_size / 10)
+    print "correct: "+ repr(correct) + "; total:"+ repr(len(test_results));
     print "Total test accuracy = {}".format(float(correct) / len(test_results))
 
     return all_model_factors, test_results
@@ -220,11 +221,11 @@ if __name__ == '__main__':
         help="Verbosity level.",
     )
     options = parser.parse_args()
-    run_experiment(train_size=options.train_size,
+    print run_experiment(train_size=options.train_size,
                    test_size=options.test_size,
                    full_test_set=options.full_test_set,
                    pool_shape=(options.pool_shape, options.pool_shape),
                    perturb_factor=options.perturb_factor,
                    seed=options.seed,
                    verbose=options.verbose,
-                   parallel=options.parallel)
+                   parallel=options.parallel)[1]
